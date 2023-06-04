@@ -1,7 +1,7 @@
 #include "shell.h"
 
 void Shell::runCommand(const std::string& command, bool inBackground) {
-    std::vector<std::string> args = split(command, ' ');
+    std::vector<std::string> args = parser.split(command, ' ');
     std::vector<char*> cargs;
     for (const auto& arg : args) {
         cargs.push_back(const_cast<char*>(arg.c_str()));
@@ -42,7 +42,9 @@ void Shell::run() {
         if (command == "exit") {
             break;
         }
-
+        else if (command == "myjobs") {
+            manager.printProcesses();
+        }
         else {
             bool inBackground = command.back() == '&';
             if (inBackground) {
@@ -52,18 +54,4 @@ void Shell::run() {
             runCommand(command, inBackground);
         }
     }
-}
-
-
-
-std::vector<std::string> Shell::split(const std::string& input, char delimiter) {
-    std::istringstream iss(input);
-    std::vector<std::string> tokens;
-    std::string token;
-
-    while (std::getline(iss, token, delimiter)) {
-        tokens.push_back(token);
-    }
-
-    return tokens;
 }
