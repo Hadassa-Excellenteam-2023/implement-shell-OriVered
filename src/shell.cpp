@@ -53,5 +53,6 @@ void Shell::run() {
 
             runCommand(command, inBackground);
         }
+        manager.cleanProcesses();//remove finished prcoess from manager data
     }
 }

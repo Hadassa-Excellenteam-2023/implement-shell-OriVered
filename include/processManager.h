@@ -37,4 +37,12 @@ public:
      * This method prints the process ID (pid) and command name of all currently running background processes.
      */
     void printProcesses();
+
+    /**
+     * @brief Cleans up finished background processes.
+     *
+     * This method uses waitpid to check on the status of background processes.
+     * If a process has finished, it is removed from the manager's process list.
+     */
+    void cleanProcesses();
 };
