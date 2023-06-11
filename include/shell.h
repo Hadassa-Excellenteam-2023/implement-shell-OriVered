@@ -1,48 +1,68 @@
-#pragma once
+#ifndef SHELL_H
+#define SHELL_H
+
 #include <string>
-#include <unistd.h>
-#include "commandParser.h"
-#include "processManager.h"
 
 /**
- * @class Shell
- * @brief A class to simulate the behavior of a command line shell.
- *
- * This Shell class interfaces with CommandParser and ProcessManager to parse and execute commands.
+ * The Shell class represents a shell that can run commands.
  */
 class Shell {
+public:
+    /**
+     * Runs the shell.
+     */
+    void run();
+
 private:
     /**
-     * @brief A CommandParser object used to parse the input commands.
+     * Runs a command in the shell.
      *
-     * CommandParser will interpret a given string as a command, and format it for execution.
-     */
-    CommandParser parser;
-
-    /**
-     * @brief A ProcessManager object used to manage and execute processes.
-     *
-     * ProcessManager will manage the execution of processes as dictated by the given commands.
-     */
-    ProcessManager manager;
-
-public:
-
-    /**
-     * @brief Executes a given command.
-     *
-     * This method will pass the command to the CommandParser to be parsed, and then to the ProcessManager to be executed.
-     * If the 'inBackground' parameter is true, the ProcessManager will execute the command in the background.
-     *
-     * @param command A string containing the command to be executed.
-     * @param inBackground A boolean indicating whether the command should be executed in the background.
+     * @param command       the command to run
+     * @param inBackground  flag indicating whether the command should run in the background
      */
     void runCommand(const std::string& command, bool inBackground);
 
     /**
-     * @brief The primary method for the Shell class.
+     * Processes a command in the shell.
      *
-     * This method will start the shell, waiting for and executing commands until termination.
+     * @param command  the command to process
      */
-    void run();
+    void processCommand(const std::string& command);
+
+    /**
+     * Creates a child process to execute a command segment.
+     *
+     * @param commandSegment  the command segment to execute
+     * @param fd_in           the input file descriptor
+     * @param fd_out          the output file descriptor
+     */
+    void createChildProcess(const std::string& commandSegment, int fd_in, int fd_out);
+
+    /**
+     * Executes a command segment in the child process.
+     *
+     * @param commandSegment  the command segment to execute
+     * @param fd_in           the input file descriptor
+     * @param fd_out          the output file descriptor
+     */
+    void childProcess(const std::string& commandSegment, int fd_in, int fd_out);
+
+    /**
+     * Handles the parent process after creating a child process.
+     *
+     * @param pid           the process ID of the child process
+     * @param inBackground  flag indicating whether the command is running in the background
+     * @param command       the command being executed
+     */
+    void parentProcess(pid_t pid, bool inBackground, const std::string& command);
+
+    /**
+     * Duplicates a file descriptor.
+     *
+     * @param oldFd          the old file descriptor to duplicate
+     * @param newFd          the new file descriptor to create
+     * @param descriptorName the name of the file descriptor
+     */
+    void duplicateFileDescriptor(int oldFd, int newFd, const std::string& descriptorName);
 };
+#endif  // SHELL_H
