@@ -1,4 +1,6 @@
 target_sources (implement-shell-OriVered PRIVATE "main.cpp"
 												"shell.cpp"
-												"processManager.cpp"
-												"commandParser.cpp")
+												"commandExecutor".cpp"
+												"commandParser.cpp"
+												"ioHandler.cpp"
+												"processManager.cpp")
