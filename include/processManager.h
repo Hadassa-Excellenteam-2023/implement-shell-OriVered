@@ -1,48 +1,51 @@
-#pragma once
-#include <string>
-#include <sys/wait.h>
-#include <unistd.h>
+#ifndef PROCESSMANAGER_H
+#define PROCESSMANAGER_H
+
+#include <iostream>
 #include <map>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 /**
- * @class ProcessManager
- * @brief A class to manage background processes.
- *
- * This ProcessManager class provides functionality to add and manage background processes.
+ * The ProcessManager class is responsible for managing background processes.
  */
 class ProcessManager {
 private:
-    /**
-     * @brief A map to store the background processes.
-     *
-     * The map associates process IDs (pids) with their corresponding command names.
-     */
     std::map<pid_t, std::string> backgroundProcesses;
 
+    ProcessManager() = default;
+
 public:
-
     /**
-     * @brief Adds a background process to the manager.
+     * Gets the instance of the ProcessManager (singleton).
      *
-     * This method adds a background process with its process ID (pid) and corresponding command name to the manager's process list.
-     *
-     * @param pid The process ID (pid) of the background process.
-     * @param command The command associated with the background process.
+     * @return the ProcessManager instance
      */
-    void addProcess(pid_t pid, const std::string& command);
+    static ProcessManager& getInstance() {
+        static ProcessManager instance;
+        return instance;
+    }
+
+    ProcessManager(const ProcessManager&) = delete;
+    ProcessManager& operator=(const ProcessManager&) = delete;
 
     /**
-     * @brief Prints the currently running background processes.
-     *
-     * This method prints the process ID (pid) and command name of all currently running background processes.
+     * Prints information about all the background processes.
      */
     void printProcesses();
 
     /**
-     * @brief Cleans up finished background processes.
+     * Adds a background process to the process manager.
      *
-     * This method uses waitpid to check on the status of background processes.
-     * If a process has finished, it is removed from the manager's process list.
+     * @param pid      the process ID of the background process
+     * @param command  the command associated with the background process
+     */
+    void addProcess(pid_t pid, const std::string& command);
+
+    /**
+     * Cleans up finished background processes.
      */
     void cleanProcesses();
 };
+
+#endif  // PROCESSMANAGER_H

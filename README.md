@@ -1,4 +1,4 @@
-﻿# implement-shell-OriVered-part-A
+﻿# implement-shell-OriVered-part-B
 
 This project implements a basic shell in C++, capable of executing system commands.
 
@@ -7,6 +7,8 @@ This project implements a basic shell in C++, capable of executing system comman
 - Run system commands
 - Background job execution
 - Command error handling
+- Input/output redirection
+- Pipeline execution
 
 ## Prerequisites
 
@@ -36,4 +38,33 @@ chmod +x main
 
 The shell prompts for commands with a "> " prompt.
 You can run any system command. Append '&' to the command to run it in the background.
-Type myjobs to list background processes, and exit to quit the shell.
+You can also redirect input and output using the '<' and '>' symbols, respectively. Additionally,
+you can chain multiple commands together using the '|' symbol for pipeline execution.
+
+Here are some examples of how to use the additional features:
+- Run a command in the background:
+```bash	
+ls -la &
+```
+
+- Redirect input from a file:
+```bash	
+sort < input.txt
+```
+
+- Redirect output to a file:
+```bash	
+ls -la > output.txt
+```
+
+- Execute commands in a pipeline:
+```bash	
+cat data.txt | grep <pattern> | sort
+```
+
+- Execute combine input/output redirection and pipeline execution to perform complex operations 
+```bash	
+echo hello > data.txt
+cat data.txt | sort | uniq > result.txt
+
+```
